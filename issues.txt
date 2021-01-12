@@ -1,1 +1,1 @@
-WinError 10053
+WinError 10053 [SOLVED]

@@ -1,7 +1,8 @@
 import socket
 
-HOST = ''
-PORT = 55555
+HOST = socket.gethostbyname(socket.gethostname()) 
+PORT = 12345 
+sock = None
 
 def init_socket():
     try:
@@ -11,7 +12,7 @@ def init_socket():
         sock.bind((HOST, PORT))
         print("[Socket bound successfully]")
         # Listen to only one client
-        sock.listen(1)
+        sock.listen()
         print(f"Server listening on port {PORT}")
         accept_conn()
     except socket.error as err:
@@ -34,8 +35,11 @@ def handle_client(conn, addr):
             conn.close()
             break
         else:
-            sock.send(cmd.encode('utf-8'))
-            data = sock.recv(1024)
+            cmd_length = len(cmd)
+            conn.send(str(cmd_length).encode('utf-8'))
+            conn.send(cmd.encode('utf-8'))
+            data = conn.recv(1024)
+            print(data.decode('utf-8'))
 
 
 def help():
